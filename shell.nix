@@ -4,8 +4,8 @@ with pkgs;
 
 mkShell {
   buildInputs = [
-    lmdb
     nim
     zeromq
+    lmdb
   ];
 }

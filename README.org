@@ -1,0 +1,27 @@
+#+title: README
+
+* Star Replay
+Record Messages being sent over the pub/sub network, then play them back to the msg broker and actors for debugging/testing.
+
+Note, the api port cant be montiroed, so in the future starRouter will have to bridge it.
+
+** Install
+#+begin_src shell
+nimble install https://github.com/lost-rob0t/starReplay.git
+#+end_src
+
+*** debian
+#+begin_src shell
+sudo apt install libzmq liblmdb-dev
+#+end_src
+*** nixos
+You may optionally install direnv to have it auto install deps apon directory
+#+begin_src shell
+nix-shell; nim c -d:release src/starReplay.nim
+#+end_src
+
+
+
+* Contribution
+Feel free to open PR or issues or donate
++ XMR: 8Bt75mjmyreavdkZoANJUVSUrPBvTLhESfeRd3QJYnh5dYh6HMJVtxg7SRCgZzzhFQYHpzqh4URKWLk2CvrcKhiJCCfGh8L
