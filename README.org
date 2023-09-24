@@ -3,7 +3,7 @@
 * Star Replay
 Record Messages being sent over the pub/sub network, then play them back to the msg broker and actors for debugging/testing.
 
-Note, the api port cant be montiroed, so in the future starRouter will have to bridge it.
+Note, the api port cant be monitored, so in the future starRouter will have to bridge it.
 
 ** Install
 #+begin_src shell
