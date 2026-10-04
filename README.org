@@ -1,27 +1,41 @@
-#+title: README
+#+title: StarReplay
+* StarReplay
+Record StarRouter publications into LMDB and replay them to the broker for debugging.
 
-* Star Replay
-Record Messages being sent over the pub/sub network, then play them back to the msg broker and actors for debugging/testing.
+** Contract
+StarLang is the source of truth for document payloads. The complete generated
+0.10.1 release is vendored under ~schemas/starintel-0.10.1~, with its immutable
+upstream commit and hashes in ~schema/starintel-schema.lock.json~. The maintained
+Router and Nim document library are pinned to tested commits and their release
+artifacts must agree with this repository's lock.
 
-Note, the api port cant be monitored, so in the future starRouter will have to bridge it.
+Recording stores the exact payload string and the original message identity,
+time, event and topic using the existing LMDB/Flatty storage format. Replay uses
+the maintained Router's strict pre-send document validation. Historical 0.9.0
+payloads use the explicit archived compatibility schema. Unsupported historical
+payloads fail validation rather than being relabeled as current documents.
+The replay connection supplies its own source identity to the broker, which
+stamps a fresh publication time while retaining the original stored record.
 
-** Install
+** Installation and usage
 #+begin_src shell
-nimble install https://github.com/lost-rob0t/starReplay.git
+nix build
+./result/bin/starReplay record --dir=recording --apiAddress=tcp://127.0.0.1:6001 --subAddress=tcp://127.0.0.1:6000
+./result/bin/starReplay replay --dir=recording --apiAddress=tcp://127.0.0.1:6001 --subAddress=tcp://127.0.0.1:6000
 #+end_src
 
-*** debian
+Nim 2 users may also run ~nimble install~ with ZeroMQ and LMDB available.
+Only the publication socket is recorded; private API traffic is not broadcast.
+
+** Validation and release updates
 #+begin_src shell
-sudo apt install libzmq liblmdb-dev
-#+end_src
-*** nixos
-You may optionally install direnv to have it auto install deps apon directory
-#+begin_src shell
-nix-shell; nim c -d:release src/starReplay.nim
+python3 scripts/sync-starintel-schema.py
+nix flake check -L
 #+end_src
 
-
-
-* Contribution
-Feel free to open PR or issues or donate
-+ XMR: 8Bt75mjmyreavdkZoANJUVSUrPBvTLhESfeRd3QJYnh5dYh6HMJVtxg7SRCgZzzhFQYHpzqh4URKWLk2CvrcKhiJCCfGh8L
+The source check verifies the complete release against its immutable StarLang
+commit. The full Nix gate builds the recorder, checks the compiled dependency's
+release agreement and runs the installed executable against a real local broker,
+recording and replaying every generated document type through actual LMDB.
+Update the release with ~scripts/sync-starintel-schema.py --commit <full-commit>~
+and repin the maintained runtimes to the same release.
