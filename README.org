@@ -25,3 +25,13 @@ nix-shell; nim c -d:release src/starReplay.nim
 * Contribution
 Feel free to open PR or issues or donate
 + XMR: 8Bt75mjmyreavdkZoANJUVSUrPBvTLhESfeRd3QJYnh5dYh6HMJVtxg7SRCgZzzhFQYHpzqh4URKWLk2CvrcKhiJCCfGh8L
+
+* Canonical document replay
+Payloads are opaque: the recorder neither infers a document version nor rewrites
+historical recordings. The immutable starRouter dependency at
+=cda4722013a94df46c309a7c14c177caf79bfae5= preserves already-serialized strings
+without JSON-encoding them a second time. That allows flat StarIntel 0.10.1
+payloads (including false/null/opaque extensions) to survive record/replay.
+Validation remains the ingest boundary's responsibility; replaying a historical
+record does not make it canonical. The dependency's native =test_payload.nim=
+roundtrip gate covers repeated string relay and JsonNode serialization.

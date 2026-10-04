@@ -10,8 +10,8 @@ bin           = @["starReplay"]
 
 # Dependencies
 
-requires "nim >= 1.6.14"
-requires "zmq == 1.4.0"
+requires "nim >= 2.0.0"
+requires "https://github.com/nim-lang/nim-zmq.git#a56af54f599337a8f5d4934fcff7554c74f77854"
 requires "limdb == 0.3.0"
-requires "starRouter >= 0.2.0"
+requires "https://github.com/lost-rob0t/starRouter.git#cda4722013a94df46c309a7c14c177caf79bfae5"
 requires "flatty"
